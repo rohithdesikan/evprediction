@@ -3,6 +3,20 @@ evprediction
 
 This project uses a 1500 home dataset to predict whether or not the house has an electric vehicle and when it is charging. 
 
+# Overview
+The goal of this project is to take in a data stream of smart meter power data for a home and do 2 things:
+- Predict whether or not the house has an electric vehicle based on energy meter data.
+- Predicts exactly when the house is charging (In Progress)
+
+This repo is a package that anyone can download, use and develop further. 
+
+### Data Format:
+- 2 months of half hour interval power reading data from smart meters some with electric vehicles and some without.
+- The data split is ~70% without EVs and 30% with EVs
+
+### Data Size:
+- 1590 houses with 2880 time stamped data points. 
+- 
 Project Organization
 ------------
 
