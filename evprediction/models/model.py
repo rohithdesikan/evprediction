@@ -29,6 +29,7 @@ def generate_train_array(train_dir, time_steps):
         y_train_arr {np.array} -- Training Labels
     """    
 
+    print("Training Directory: ", train_dir)
     X_train_path = os.path.join(train_dir, 'X_train.csv')
     y_train_path = os.path.join(train_dir, 'y_train.csv')
 
@@ -36,10 +37,10 @@ def generate_train_array(train_dir, time_steps):
     y_train = pd.read_csv(y_train_path)
 
     # Convert to np array and reshape into LSTM format
-    X_train_arr = np.array(X_train).reshape(len(X_train), time_steps, -1)
+    X_train_arr = np.reshape(np.array(X_train), (len(X_train), time_steps, -1))
 
     # Set the y labels as np arrays
-    y_train_arr = np.array(y_train.copy())
+    y_train_arr = np.array(y_train)
 
     return X_train_arr, y_train_arr
 
@@ -55,6 +56,7 @@ def generate_test_array(test_dir, time_steps):
         y_test_arr {np.array} -- testing Labels
     """    
 
+    print("Test Directory: ", test_dir)
     X_test_path = os.path.join(test_dir, 'X_test.csv')
     y_test_path = os.path.join(test_dir, 'y_test.csv')
 
@@ -62,10 +64,10 @@ def generate_test_array(test_dir, time_steps):
     y_test = pd.read_csv(y_test_path)
 
     # Convert to np array and reshape into LSTM format
-    X_test_arr = np.array(X_test).reshape(len(X_test), time_steps, -1)
+    X_test_arr = np.reshape(np.array(X_test), (len(X_test), time_steps, -1))
 
     # Set the y labels as np arrays
-    y_test_arr = np.array(y_test.copy())
+    y_test_arr = np.array(y_test)
 
     return X_test_arr, y_test_arr
 
@@ -130,9 +132,9 @@ if __name__ == "__main__":
                         help='Number of LSTM hidden units for recurrent layers (default: 128)')
 
     parser.add_argument('--time-steps', type=int, default=60, metavar='N',
-                        help='The number of time steps that this LSTM model runs over. ')
+                        help='The number of time steps that this LSTM model runs over.')
 
-    parser.add_argument('--epochs', type=int, default=40, metavar='N',
+    parser.add_argument('--epochs', type=int, default=15, metavar='N',
                         help='number of epochs to train (default: 40)')
 
     parser.add_argument('--learning-rate', type=float, default=0.01, metavar='S',
@@ -141,17 +143,18 @@ if __name__ == "__main__":
     # Data Directories
     parser.add_argument('--train-dir', type=str, default=os.environ.get('SM_CHANNEL_TRAIN'))
     parser.add_argument('--test-dir', type=str, default=os.environ.get('SM_CHANNEL_TEST'))
-    parser.add_argument('--model-dir', type=str, default=os.environ.get('SM_MODEL_DIR'))
-    parser.add_argument('--output-data-dir', type=str, default=os.environ['SM_OUTPUT_DATA_DIR'])
+    parser.add_argument('--model_dir', type=str, default=os.environ['SM_MODEL_DIR'])
+    # parser.add_argument('--output-data-dir', type=str, default=os.environ['SM_OUTPUT_DATA_DIR'])
 
-    
+    args = parser.parse_args()
+
     # Run the functions to train the model
-    X_train, y_train = generate_train_array(train_dir, time_steps)
-    X_test, y_test = generate_train_array(test_dir, time_steps)
-    model = create_lstm(num_dense_units, num_lstm_cells, time_steps)
-    history = train(X_train, y_train, X_test, y_test, model, epochs, learning_rate)
+    X_train, y_train = generate_train_array(args.train_dir, args.time_steps)
+    X_test, y_test = generate_test_array(args.test_dir, args.time_steps)
+    model = create_lstm(args.num_dense_units, args.num_lstm_cells, args.time_steps)
+    history = train(X_train, y_train, X_test, y_test, model, args.epochs, args.learning_rate)
 
-    model.save(output_data_dir + r'/evmodel1.h5')
+    # model.save(args.model_dir + '/evmodelV1.h5')
     
 
 # %%

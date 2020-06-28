@@ -6,6 +6,7 @@ import numpy as np
 # Import AWS training package
 import sagemaker
 from sagemaker.tensorflow import TensorFlow
+from sagemaker.tensorflow import TensorFlowModel
 import boto3
 
 # %%
@@ -27,18 +28,16 @@ train_dir = f's3://{bucket_name}/{prefix}/train/'
 test_dir = f's3://{bucket_name}/{prefix}/test/'
 
 # %%
+# model_dir = '/opt/ml/model'
 estimator = TensorFlow(entry_point = 'model.py',
                     source_dir = os.getcwd(),
                     role = role,
-                    framework_version = '2.1.0',
-                    train_instance_count = 2,
+                    framework_version = '1.13',
+                    train_instance_count = 1,
                     train_instance_type = 'ml.p2.xlarge',
-                    py_version = 'py37',
-                    output_path = f's3:/{bucket_name}/{prefix}/output'
+                    py_version = 'py3',
+                    model_dir = f's3://{bucket_name}/{prefix}/output/'
                     )
 
 # %%
-estimator.fit({'train' : train_dir, 'test' : test_dir}, run_tensorboard_locally = True)
-
-
-# %%
+estimator.fit({'train' : train_dir, 'test': test_dir}, run_tensorboard_locally = True)

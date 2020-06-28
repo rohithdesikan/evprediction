@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  evprediction:
+    image: evprediction
+    build:
+      context: .
+      dockerfile: Dockerfile
