@@ -1,60 +1,44 @@
 # %%
 # Import base packages
-import numpy as np
-import json
 import os
-import datetime
-from PIL import Image, ImageDraw
+import numpy as np
 
 # Import AWS training package
 import sagemaker
-from sagemaker.pytorch import PyTorch
+from sagemaker.tensorflow import TensorFlow
 import boto3
 
 # %%
-# Set the file paths
-curr_dir = os.getcwd()
-path_sample = os.path.abspath(os.path.join(curr_dir, os.pardir, 'data', 'sample_data'))
-print(path_sample)
-
 # Set up sagemaker session
-sagemaker_session = sagemaker.Session(default_bucket = 'rohithdesikan-deepfashion')
+sagemaker_session = sagemaker.Session(default_bucket = 'rdevprediction')
 
 # Get default bucket
-bucket = sagemaker_session.default_bucket()
-print(bucket)
+bucket_name = sagemaker_session.default_bucket()
+print(bucket_name)
 
 # Get role
 role = sagemaker.get_execution_role()
 print(role)
 
-# %%
 # set prefix, a descriptive name for the S3 directory
-prefix = 'deepfashion_sample'
+prefix = 'evpred'
 
-# upload all data to S3
-# sagemaker_session.upload_data(path_sample, bucket=bucket, key_prefix=prefix)
-
-# %%
-s3 = boto3.client('s3')
-
-for file in s3.list_objects_v2(Bucket = bucket, Prefix= f"{prefix}/image/"):
-    print(file)
+train_dir = f's3://{bucket_name}/{prefix}/train/'
+test_dir = f's3://{bucket_name}/{prefix}/test/'
 
 # %%
-
-estimator = PyTorch(entry_point='model.py',
-                    role=role,
-                    framework_version='1.2.0',
-                    train_instance_count=2,
-                    train_instance_type='ml.p2.xlarge',
-                    output_path='s3://rohithdesikan-deepfashion/deepfashion_sample/output',
-                    hyperparameters={
-                        'epochs': 5,
-                    })
+estimator = TensorFlow(entry_point = 'model.py',
+                    source_dir = os.getcwd(),
+                    role = role,
+                    framework_version = '2.1.0',
+                    train_instance_count = 2,
+                    train_instance_type = 'ml.p2.xlarge',
+                    py_version = 'py37',
+                    output_path = f's3:/{bucket_name}/{prefix}/output'
+                    )
 
 # %%
-# TO DO: FIGURE OUT HOW TO GET THE LIST OF FILES WITHIN AN S3 BUCKET SO THAT THEY CAN BE USED TO FIGURE OUT THE FILENAMES THAT NEED TO BE OPENED. LOOK AT THE UDACITY COURSE TO SEE HOW BEST TO LOOK AT FILE PATHS ON AWS
-estimator.fit({'bucket_name': bucket_name})
+estimator.fit({'train' : train_dir, 'test' : test_dir}, run_tensorboard_locally = True)
+
 
 # %%

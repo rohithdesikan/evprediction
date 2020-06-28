@@ -88,4 +88,6 @@ target/
 # Mypy cache
 .mypy_cache/
 
+# Ignore virtualen
+evpred/
 

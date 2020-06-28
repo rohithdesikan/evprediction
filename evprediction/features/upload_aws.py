@@ -39,14 +39,14 @@ X_train, X_test, y_train, y_test = train_test_split(ev_cleaned, y_hot, test_size
 
 # %%
 # Save data locally to upload the entire folder contents to S3
-X_train.to_csv(output_data_path + r"/X_train.csv")
-pd.DataFrame(y_train).to_csv(output_data_path + r"/y_train.csv")
-X_test.to_csv(output_data_path + r"/X_test.csv")
-pd.DataFrame(y_test).to_csv(output_data_path + r"/y_test.csv")
+X_train.to_csv(output_data_path + r"/train/X_train.csv")
+pd.DataFrame(y_train).to_csv(output_data_path + r"/train/y_train.csv")
+X_test.to_csv(output_data_path + r"/test/X_test.csv")
+pd.DataFrame(y_test).to_csv(output_data_path + r"/test/y_test.csv")
 
 # %%
 # Set up sagemaker session
-sagemaker_session = sagemaker.Session(default_bucket = 'rd-evprediction')
+sagemaker_session = sagemaker.Session(default_bucket = 'rdevprediction')
 
 # Get default bucket
 bucket = sagemaker_session.default_bucket()

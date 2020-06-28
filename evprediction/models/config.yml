@@ -1,0 +1,6 @@
+model_hps:
+  num_dense_units: 100
+  num_lstm_cells: 128
+  time_steps: 60
+  epochs: 40
+  learning_rate: 0.01
