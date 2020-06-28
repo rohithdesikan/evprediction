@@ -1,23 +1,18 @@
 ## THIS SCRIPT IS USED TO PREDICT WHETHER OR NOT A HOUSE HAS AN ELECTRIC VEHICLE
 # %%
-# Import Packages
-# Base Packages
+# Import base packages
+import os
 import numpy as np
 import pandas as pd
-# import time
+import time
 import yaml
-import os
 import datetime
+from IPython.display import display
 
 # Pandas Formatting and Styling:
 pd.options.display.max_rows = 200
 pd.options.display.max_columns = 500
 pd.set_option('display.float_format',lambda x: '%.3f' % x)
-# from IPython.display import display
-
-# Warnings
-import warnings
-warnings.filterwarnings('ignore')
 
 # Data Visualization Packages
 import matplotlib.pyplot as plt
@@ -36,25 +31,19 @@ import tensorflow as tf
 from tensorflow import keras
 
 from keras.models import Sequential
-from keras.layers import Dense, Activation, Embedding, Dropout, TimeDistributed
+from keras.layers import Dense, Activation, Embedding, Dropout
 from keras.layers import LSTM
 from keras.optimizers import Adam
 
-# Another file that has a few functions performing ETL
-import etl
-
-# Set up hte config file with hyperparameters
+# Set up the config file with hyperparameters
 config_file = 'config.yml'
 
 # Read in YAML file
 with open(config_file, 'r') as f:
     inputs = yaml.load(f,Loader=yaml.FullLoader)
 
-# Import Azure Packages
-import azureml
-from azureml.core import Experiment, Workspace, Run
-from azureml.core.compute import ComputeTarget, AmlCompute
-from azureml.core.compute_target import ComputeTargetException
+# %%
+datadir = os.path.abspath(os.path.join(os.getcwd(), os.pardir, 'data', 'external'))
 
 
 # %%

@@ -1,8 +1,8 @@
 import numpy as np
 import pandas as pd
 
-def clean_data(X,y):
-    """Takes data as a csv file, gets rid of the house id column and removes rows with NaN values
+def drop_nan(X,y):
+    """Takes data as a pandas dataframe, gets rid of the house id column and removes rows with NaN values
     
     Arguments:
         X {pd.DataFrame} -- This is the full dataset of meter readings at each time step. This will be split up into training and validation later
@@ -17,9 +17,10 @@ def clean_data(X,y):
     X.drop('House ID', axis = 1, inplace = True)
     y.drop('House ID', axis = 1, inplace = True)
 
-    #Find the rows that have NaNs, there are only 4, so we can get rid of them. 
-    nan_ind = X.isna().sum(axis = 1).nonzero()
-    # X.iloc[nan_ind[0],:]
+    # Find the indices (rows/houses) that have NaNs and remove them. np.nonzero returns a list of tuples of values, in this case, it will be a tuple of length 1
+    nan_ind = np.nonzero(X.isna().sum(axis = 1).values)
+
+
     X_cleaned = X.drop(nan_ind[0], axis = 0, inplace = False)
     y_cleaned = y.drop(nan_ind[0], axis = 0, inplace = False)
 
