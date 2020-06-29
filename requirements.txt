@@ -3,8 +3,6 @@ alembic==1.4.2
 appnope==0.1.0
 astunparse==1.6.3
 attrs==19.3.0
-azure-core==1.6.0
-azure-storage-blob==12.3.2
 backcall==0.2.0
 bleach==3.1.5
 boto3==1.14.12

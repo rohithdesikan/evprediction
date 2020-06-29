@@ -2,6 +2,7 @@
 # Import base packages
 import os
 import numpy as np
+import datetime
 
 # Import AWS training package
 import sagemaker
@@ -26,6 +27,7 @@ prefix = 'evpred'
 
 train_dir = f's3://{bucket_name}/{prefix}/train/'
 test_dir = f's3://{bucket_name}/{prefix}/test/'
+output_path = f's3://{bucket_name}/{prefix}/output/'
 
 # %%
 # model_dir = '/opt/ml/model'
@@ -36,8 +38,11 @@ estimator = TensorFlow(entry_point = 'model.py',
                     train_instance_count = 1,
                     train_instance_type = 'ml.p2.xlarge',
                     py_version = 'py3',
-                    model_dir = f's3://{bucket_name}/{prefix}/output/'
+                    model_dir = output_path
                     )
 
 # %%
-estimator.fit({'train' : train_dir, 'test': test_dir}, run_tensorboard_locally = True)
+curr_time = datetime.datetime.now().strftime("%m-%d-%Y-%H-%M-%S")
+estimator.fit({'train' : train_dir, 'test': test_dir}, job_name = f'{curr_time}-evmodel', run_tensorboard_locally = True)
+
+# %%
