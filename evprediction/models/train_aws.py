@@ -34,11 +34,11 @@ output_path = f's3://{bucket_name}/{prefix}/output/'
 estimator = TensorFlow(entry_point = 'model.py',
                     source_dir = os.getcwd(),
                     role = role,
-                    framework_version = '1.13',
+                    framework_version = '2.1.0',
                     train_instance_count = 1,
                     train_instance_type = 'ml.p2.xlarge',
                     py_version = 'py3',
-                    model_dir = output_path
+                    script_mode = True
                     )
 
 # %%

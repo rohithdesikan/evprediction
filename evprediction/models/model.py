@@ -134,7 +134,7 @@ if __name__ == "__main__":
     parser.add_argument('--time-steps', type=int, default=60, metavar='N',
                         help='The number of time steps that this LSTM model runs over.')
 
-    parser.add_argument('--epochs', type=int, default=3, metavar='N',
+    parser.add_argument('--epochs', type=int, default=15, metavar='N',
                         help='number of epochs to train (default: 40)')
 
     parser.add_argument('--learning-rate', type=float, default=0.01, metavar='S',
@@ -154,7 +154,7 @@ if __name__ == "__main__":
     model = create_lstm(args.num_dense_units, args.num_lstm_cells, args.time_steps)
     history = train(X_train, y_train, X_test, y_test, model, args.epochs, args.learning_rate)
 
-    keras.models.save_model(model, os.environ['SM_MODEL_DIR'])
+    model.save(os.environ['SM_MODEL_DIR'] + r'/evmodel.h5')
     
 
 # %%
