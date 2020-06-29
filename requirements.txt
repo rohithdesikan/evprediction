@@ -3,6 +3,8 @@ alembic==1.4.2
 appnope==0.1.0
 astunparse==1.6.3
 attrs==19.3.0
+azure-core==1.6.0
+azure-storage-blob==12.3.2
 backcall==0.2.0
 bleach==3.1.5
 boto3==1.14.12
@@ -21,6 +23,7 @@ defusedxml==0.6.0
 docker==4.2.1
 docutils==0.15.2
 entrypoints==0.3
+-e git+https://github.com/rohithdesikan/evprediction.git@e0b1952fa5400bc4439c06211015d498c9b9de6a#egg=evprediction
 Flask==1.1.2
 gast==0.3.3
 gitdb==4.0.5
@@ -98,6 +101,7 @@ s3transfer==0.3.3
 sagemaker==1.66.0
 scikit-learn==0.23.1
 scipy==1.5.0
+seaborn==0.10.1
 Send2Trash==1.5.0
 six==1.15.0
 smdebug-rulesconfig==0.1.4

@@ -9,20 +9,26 @@ ENV PYTHONDONTWRITEBYTECODE 1
 # Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED 1
 
+# Set workdir
+WORKDIR /container
+
+# Add necessary folders
+COPY requirements.txt /container
+COPY models /container
+COPY app /container
+COPY data/interim /container
+
 # Install pip requirements
-ADD requirements.txt .
-RUN python -m pip install -r requirements.txt
+RUN pip install --upgrade pip
+RUN pip --no-cache-dir install -r requirements.txt
 
-WORKDIR /app
-ADD . /app
-ADD . /models
-ADD . /evprediction
-
+# Expose a 5000 port
 EXPOSE 5000
 
 # Switching to a non-root user, please refer to https://aka.ms/vscode-docker-python-user-rights
-RUN useradd appuser && chown -R appuser /app
-USER appuser
+# RUN useradd appuser && chown -R appuser /container
+# USER appuser
 
 # During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
-CMD ["python", "app.py"]
+ENTRYPOINT [ "python" ]
+CMD [ "app/app.py" ]

@@ -10,7 +10,7 @@ from evprediction import convert_to_array
 
 # %%
 # Load saved model
-model_path = os.path.abspath(os.path.join(os.getcwd(), os.pardir, 'models'))
+model_path = os.path.abspath(os.path.join(os.getcwd(), 'models'))
 model_name = 'evmodel.h5'
 model = tf.keras.models.load_model(model_path + r'/' + model_name)
 
