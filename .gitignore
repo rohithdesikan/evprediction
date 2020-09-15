@@ -92,3 +92,4 @@ target/
 
 # Ignore virtualen
 evpred/
+aws_secret.txt

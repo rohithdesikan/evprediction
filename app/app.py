@@ -10,9 +10,9 @@ from evprediction import convert_to_array
 
 # %%
 # Load saved model
-model_path = os.path.abspath(os.path.join(os.getcwd(), 'models'))
+# model_path = os.path.abspath(os.path.join(os.getcwd(), 'models'))
 model_name = 'evmodel.h5'
-model = tf.keras.models.load_model(model_path + r'/' + model_name)
+model = tf.keras.models.load_model(model_name)
 
 # %%
 app = Flask(__name__)
@@ -22,8 +22,8 @@ def hello():
     return "Welcome to EV Prediction"
 
 
-# It only works for 1 test point
-@app.route('/predict', methods = ['POST']) 
+# Works for any number of test points
+@app.route('/predict', methods = ['POST'])
 def make_prediction():
 
     # Make the request in json format
@@ -57,4 +57,4 @@ def make_prediction():
     return make_response({'Predictions': out_int})
 
 if __name__ == "__main__": 
-    app.run(host ='0.0.0.0', port = 5001, debug = True)
+    app.run(host ='0.0.0.0', port = 5000, debug = True)
